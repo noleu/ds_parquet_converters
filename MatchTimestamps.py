@@ -13,6 +13,7 @@ def match_time_stamps(workload_path, price_path):
     # Load the Parquet file into a DataFrame
     df_price = pd.read_parquet(price_path, engine="pyarrow")  # Use engine="fastparquet" if needed
 
+    df_price['timestamp'] = pd.to_datetime(df_price['timestamp'], unit='ms')
     lowest_timestamp_price = pd.to_datetime(df_price['timestamp'].min())
     highest_timestamp_price = pd.to_datetime(df_price['timestamp'].max())
 
@@ -23,14 +24,14 @@ def match_time_stamps(workload_path, price_path):
 
 
     # Generate new timestamps within the specified range
-    new_timestamps = pd.date_range(start=lowest_timestamp_price, end=highest_timestamp_price, periods=len(df_workload))
+    new_timestamps = pd.date_range(start=lowest_timestamp_price, end=highest_timestamp_price, freq=original_frequency)[:len(df_workload)]
     df_workload['submission_time'] = new_timestamps
 
     # Save DataFrame to Parquet format
     new_workload_path = workload_path.replace('.parquet', '-new.parquet')
     df_workload.to_parquet(new_workload_path, engine="pyarrow", index=False)  # Use engine="fastparquet" if preferred
 
-    print(f"Parquet file created: {workload_path}")
+    print(f"Parquet file created: {new_workload_path}")
 
 
 # Press the green button in the gutter to run the script.
