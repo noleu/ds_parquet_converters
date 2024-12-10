@@ -21,17 +21,21 @@ schema_fragments = {
     "cpu_usage": pa.float64()
 }
 pa_schema_fragments = pa.schema([pa.field(x, y, nullable=False) for x, y in schema_fragments.items()])
-def writeTrace(df_tasks, df_fragments, output_folder):
+def writeTrace(df_tasks, output_folder, df_fragments=None):
     if not os.path.exists(f"{output_folder}"):
         os.makedirs(f"{output_folder}")
+
     df_tasks = df_tasks[tasks_columns]
-    df_fragments = df_fragments[fragments_columns]
     pa_tasks_out = pa.Table.from_pandas(
         df = df_tasks,
         schema = pa_schema_tasks,
         preserve_index=False
     )
     pq.write_table(pa_tasks_out, f"{output_folder}/tasks.parquet")
+
+    if df_fragments is None:
+        return
+    df_fragments = df_fragments[fragments_columns]
     pa_fragments_out = pa.Table.from_pandas(
         df = df_fragments,
         schema = pa_schema_fragments,
