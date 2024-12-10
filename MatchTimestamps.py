@@ -3,6 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import pandas as pd
+import parquet_file_creator as pfc
 
 
 def match_time_stamps(workload_path, price_path):
@@ -26,12 +27,16 @@ def match_time_stamps(workload_path, price_path):
     # Generate new timestamps within the specified range
     new_timestamps = pd.date_range(start=lowest_timestamp_price, end=highest_timestamp_price, freq=original_frequency)[:len(df_workload)]
     df_workload['submission_time'] = new_timestamps
+    df_workload['submission_time'] = df_workload['submission_time'].astype('int64') // 10**6
+
 
     # Save DataFrame to Parquet format
-    new_workload_path = workload_path.replace('.parquet', '-new.parquet')
-    df_workload.to_parquet(new_workload_path, engine="pyarrow", index=False)  # Use engine="fastparquet" if preferred
+    # new_workload_path = workload_path.replace('.parquet', '-new.parquet')
+    # df_workload.to_parquet(new_workload_path, engine="pyarrow", index=False)  # Use engine="fastparquet" if preferred
 
-    print(f"Parquet file created: {new_workload_path}")
+    pfc.writeTrace(df_workload, './aws-bitbrains-small')
+
+    # print(f"Parquet file created: {new_workload_path}")
 
 
 # Press the green button in the gutter to run the script.
