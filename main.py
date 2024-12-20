@@ -32,9 +32,9 @@ def convert_to_parquett(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    convert_to_parquett('c7g.2xlarge')
-    convert_to_parquett('m7g.medium')
-    convert_to_parquett('m7g.xlarge')
-    convert_to_parquett('r7g.2xlarge')
+    convert_to_parquett('pricing/c7g.2xlarge')
+    convert_to_parquett('pricing/m7g.medium')
+    convert_to_parquett('pricing/m7g.xlarge')
+    convert_to_parquett('pricing/r7g.2xlarge')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
