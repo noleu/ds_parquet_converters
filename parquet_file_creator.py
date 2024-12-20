@@ -3,14 +3,15 @@ from datetime import datetime
 import os
 import pyarrow as pa
 import pyarrow.parquet as pq
-tasks_columns = ["id", "submission_time", "duration", "cpu_count", "cpu_capacity", "mem_capacity"]
+tasks_columns = ["id", "submission_time", "duration", "cpu_count", "cpu_capacity", "mem_capacity", 'snapshot_delay']
 schema_tasks = {
     "id": pa.string(),
     "submission_time": pa.timestamp("ms"),
     "duration": pa.int64(),
     "cpu_count": pa.int32(),
     "cpu_capacity": pa.float64(),
-    "mem_capacity": pa.int64()
+    "mem_capacity": pa.int64(),
+    "snapshot_delay": pa.int64()
 }
 pa_schema_tasks = pa.schema([pa.field(x, y, nullable=False) for x, y in schema_tasks.items()])
 fragments_columns = ["id", "duration", "cpu_count", "cpu_usage"]
