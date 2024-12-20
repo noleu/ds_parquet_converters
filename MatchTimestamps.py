@@ -30,6 +30,9 @@ def match_time_stamps(workload_path, price_path):
     df_workload['submission_time'] = df_workload['submission_time'].astype('int64') // 10**6
 
 
+    if not "snapshot_delay" in df_workload.columns:
+        df_workload['snapshot_delay'] = 0 * df_workload['duration']
+
     # Save DataFrame to Parquet format
     # new_workload_path = workload_path.replace('.parquet', '-new.parquet')
     # df_workload.to_parquet(new_workload_path, engine="pyarrow", index=False)  # Use engine="fastparquet" if preferred
